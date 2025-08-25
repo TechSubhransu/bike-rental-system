@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Bookings
+{% endblock title %}
+
+{% block body %}
+<style>
+  .booking-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    padding: 25px;
+  }
+  .booking-title {
+    font-weight: 700;
+    font-size: 24px;
+    color: #222;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .table-custom {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+  .table-custom thead {
+    background: #0072ff;
+    color: white;
+  }
+  .table-custom thead th {
+    padding: 14px;
+    text-align: center;
+    font-size: 15px;
+  }
+  .table-custom tbody tr {
+    background: #f9f9f9;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    color: #222; /* ✅ Ensures dark readable text */
+  }
+  .table-custom tbody tr:hover {
+    background: #eef5ff;
+    transform: scale(1.01);
+    color: #222; /* ✅ Keep text dark on hover */
+  }
+  .table-custom td, .table-custom th {
+    padding: 14px;
+    text-align: center;
+    vertical-align: middle;
+    color: #222; /* ✅ Ensures text is always visible */
+  }
+  .bike-photo {
+    width: 80px;
+    height: 55px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+    padding: 4px;
+    border: 1px solid #ddd;
+  }
+  .status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .status-pending {
+    background: #e0f7fa;
+    color: #00796b;
+  }
+  .status-approved {
+    background: #d4edda;
+    color: #155724;
+  }
+  .status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+  }
+</style>
+
+<div class="booking-container">
+  {% if bookings %}
+    <h2 class="booking-title">📋 My Bookings</h2>
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>SL No</th>
+            <th>Booking ID</th>
+            <th>Bike</th>
+            <th>Photo</th>
+            <th>Pickup Date</th>
+            <th>Pickup Time</th>
+            <th>Drop Date</th>
+            <th>Drop Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bike in bookings %}
+          <tr>
+            <th>{{ forloop.counter }}</th>
+            <td>#{{ bike.booking_id }}</td>
+            <td>{{ bike.bike_name.bike_name }}</td>
+            <td><img src="{{ bike.bike_name.photo.url }}" alt="Bike" class="bike-photo"></td>
+            <td>{{ bike.pickup_date }}</td>
+            <td>{{ bike.pickup_time }}</td>
+            <td>{{ bike.drop_date }}</td>
+            <td>{{ bike.drop_time }}</td>
+            <td>
+              {% if bike.status == 'Pending' %}
+                <span class="status-badge status-pending">Pending</span>
+              {% elif bike.status == 'Approve' %}
+                <span class="status-badge status-approved">Approved</span>
+              {% elif bike.status == 'Reject' %}
+                <span class="status-badge status-rejected">Rejected</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <center>
+      <h2 class="text-muted my-5">😢 No bookings yet</h2>
+    </center>
+  {% endif %}
+</div>
+{% endblock body %}

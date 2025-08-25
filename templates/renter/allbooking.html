@@ -1,0 +1,136 @@
+{% extends "index.html" %}
+
+{% block title %}
+ALL_bookings
+{% endblock title %}
+
+{% block body %}
+<div class="container my-5">
+  <h1 class="text-center fw-bold mb-4">📋 All Bookings for Renter</h1>
+
+  <!-- Filter Dropdown -->
+  <div class="mb-4 text-end">
+      <form method="get" action="">
+          <label for="statusFilter" class="me-2 fw-semibold">Filter by Status:</label>
+          <select name="status" id="statusFilter" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+              <option value="">All</option>
+              <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending</option>
+              <option value="Approve" {% if request.GET.status == 'Approve' %}selected{% endif %}>Approved</option>
+              <option value="Reject" {% if request.GET.status == 'Reject' %}selected{% endif %}>Rejected</option>
+          </select>
+      </form>
+  </div>
+
+  {% if allbookings %}
+  <div class="table-responsive">
+      <table class="table table-dark table-hover table-striped text-center align-middle">
+          <thead>
+              <tr>
+                  <th>SL No</th>
+                  <th>Booking ID</th>
+                  <th>Name</th>
+                  <th>Bike</th>
+                  <th>Photo</th>
+                  <th>Pickup Date/Time</th>
+                  <th>Drop Date/Time</th>
+                  <th>Status</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for book in allbookings %}
+              <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ book.booking_id }}</td>
+                  <td>{{ book.username.first_name }} {{ book.username.last_name }}</td>
+                  <td>{{ book.bike_name.bike_name }}</td>
+                  <td><img src="{{ book.bike_name.photo.url }}" alt="" style="width: 90px;"></td>
+                  <td>{{ book.pickup_date }}<br>{{ book.pickup_time }}</td>
+                  <td>{{ book.drop_date }}<br>{{ book.drop_time }}</td>
+                  <td>
+                      {% if book.status == 'Pending' %}
+                      <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal{{ book.pk }}">Approve</button>
+                      <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal{{ book.pk }}">Reject</button>
+
+                      {% elif book.status == 'Approve' %}
+                      <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal{{ book.pk }}">Approved</button>
+
+                      {% elif book.status == 'Reject' %}
+                      <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal{{ book.pk }}">Rejected</button>
+                      {% endif %}
+                  </td>
+              </tr>
+
+              <!-- Approve Modal -->
+              <div class="modal fade" id="approveModal{{ book.pk }}" tabindex="-1" aria-labelledby="approveModalLabel{{ book.pk }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content bg-dark text-light">
+                          <div class="modal-header">
+                              <h5 class="modal-title">Confirm Approval</h5>
+                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              Are you sure you want to approve booking #{{ book.booking_id }}?
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <a href="{% url 'approve' book.pk %}" class="btn btn-success">Yes, Approve</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Reject Modal -->
+              <div class="modal fade" id="rejectModal{{ book.pk }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ book.pk }}" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content bg-dark text-light">
+                          <div class="modal-header">
+                              <h5 class="modal-title">Confirm Rejection</h5>
+                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              Are you sure you want to reject booking #{{ book.booking_id }}?
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <a href="{% url 'reject' book.pk %}" class="btn btn-danger">Yes, Reject</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+  {% else %}
+  <div class="text-center mt-5">
+      <h3 class="text-warning">🚫 No bookings to display.</h3>
+  </div>
+  {% endif %}
+</div>
+
+<style>
+  table thead {
+    letter-spacing: 1px;
+  }
+
+  table img {
+    transition: transform 0.3s ease;
+  }
+
+  table img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px cyan;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: rgba(0, 195, 255, 0.1);
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+</style>
+{% endblock body %}

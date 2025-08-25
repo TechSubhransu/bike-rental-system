@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Profile
+{% endblock title %}
+
+{% block body %}
+<style>
+  .profile-card {
+    max-width: 700px;
+    margin: auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    color: #333; /* ✅ Default text color */
+  }
+  .profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  }
+  .profile-header {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .profile-header img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid white;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  .profile-body {
+    padding: 30px;
+    color: #222; /* ✅ Force visible text */
+  }
+  .profile-body h4 {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #111; /* ✅ Heading darker */
+  }
+  .profile-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .profile-info li {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    color: #444; /* ✅ Info items visible */
+  }
+  .profile-info li strong {
+    color: #000; /* ✅ Labels bold black */
+  }
+  .profile-info li:last-child {
+    border-bottom: none;
+  }
+  .logout-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 30px;
+    background: #0072ff;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .logout-btn:hover {
+    background: #0056cc;
+    transform: scale(1.05);
+  }
+</style>
+
+<div class="profile-card my-5">
+  <!-- Header -->
+  <div class="profile-header">
+    <img src="{{ PO.profile_pic.url }}" alt="Profile Picture">
+    <h3 class="mt-3">{{ UO.first_name }} {{ UO.last_name }}</h3>
+    <p class="mb-0">BikeWala Member</p>
+  </div>
+
+  <!-- Body -->
+  <div class="profile-body">
+    <h4>Profile Information</h4>
+    <ul class="profile-info">
+      <li><strong>Name:</strong> {{ UO.first_name }} {{ UO.last_name }}</li>
+      <li><strong>Phone:</strong> {{ PO.pno }}</li>
+      <li><strong>Email:</strong> {{ UO.email }}</li>
+    </ul>
+
+    <a href="{% url 'user_logout' %}" class="logout-btn">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+  </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock title %}
+
+{% block body %}
+<style>
+  #card{
+      width: 18rem;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      
+  }
+</style>
+<center><br><br><br><br><br>
+    <div class="card" id="card">
+      <div class="card-body">
+        <h5 class="card-title">Login</h5>
+        <form method="post">
+          {% csrf_token %}
+          <form>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <input type="text" name="un" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                {% comment %} <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> {% endcomment %}
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" name="pw" class="form-control" id="exampleInputPassword1">
+              </div>
+              <a href="{% url 'forgetpw' %}">Forget Password?</a>
+              <button type="submit" class="btn btn-primary">Login</button><br><br>
+              <a href="{% url 'register' %}">Create An Account</a>
+            </form>
+      </form>
+      </div>
+    </div>
+</center>
+
+{% endblock body %}

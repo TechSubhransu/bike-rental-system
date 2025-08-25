@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+
+{% block title %}
+Add Bikes
+{% endblock title %}
+
+{% block body %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.2);
+        padding: 30px;
+    }
+
+    .glass-card h4 {
+        color: cyan;
+    }
+
+    .glass-card form p {
+        margin-bottom: 1rem;
+    }
+
+    .glass-card input[type="text"],
+    .glass-card input[type="number"],
+    .glass-card input[type="file"],
+    .glass-card select,
+    .glass-card textarea {
+        background-color: #111 !important;
+        color: #eee;
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 8px;
+        width: 100%;
+    }
+
+    .glass-card input:focus,
+    .glass-card textarea:focus,
+    .glass-card select:focus {
+        outline: none;
+        border-color: cyan;
+        box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    }
+
+    .submit-btn {
+        background-color: transparent;
+        color: cyan;
+        border: 2px solid cyan;
+        border-radius: 10px;
+        padding: 10px 25px;
+        font-weight: bold;
+        transition: 0.3s ease-in-out;
+    }
+
+    .submit-btn:hover {
+        background-color: cyan;
+        color: black;
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="glass-card" style="width: 100%; max-width: 500px;">
+        <h4 class="text-center mb-4">🚲 Add Bikes</h4>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ EBFO.as_p }}
+            <div class="text-center mt-4">
+                <button type="submit" class="submit-btn">➕ Add Bike</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}

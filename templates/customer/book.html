@@ -1,0 +1,90 @@
+{% block body %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+    }
+
+    .booking-wrapper {
+        max-width: 600px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+        text-align: center;
+    }
+
+    .bike-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .bike-img {
+        width: 250px;
+        height: auto;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    form input,
+    form select {
+        width: 100%;
+        padding: 10px 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: none;
+        font-size: 1rem;
+    }
+
+    form input[type="submit"] {
+        background: #00c6ff;
+        color: white;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    form input[type="submit"]:hover {
+        background: #0072ff;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #00ffff;
+    }
+
+    @media (max-width: 768px) {
+        .booking-wrapper {
+            margin: 20px;
+            padding: 20px;
+        }
+
+        .bike-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="booking-wrapper">
+    <h1 class="form-title">Bike Booking</h1>
+    <div id="bike">
+        <div class="bike-title">You are booking {{ bike.bike_name }}</div>
+        <img src="{{ bike.photo.url }}" alt="{{ bike.bike_name }}" class="bike-img">
+    </div>
+    <div id="book">
+        <form method="post">
+            {% csrf_token %}
+            {{ EBFO.as_p }}
+            <input type="submit" value="🚀 Book Now">
+        </form>
+    </div>
+</div>
+{% endblock body %}

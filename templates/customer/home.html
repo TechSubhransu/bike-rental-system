@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+  .bike-section {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    border-radius: 0 0 30px 30px;
+  }
+  .bike-section h1 {
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  }
+  .form-select {
+    min-width: 160px;
+    transition: all 0.3s ease;
+  }
+  .form-select:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+  }
+  #brands ul {
+  padding: 0;
+  margin: 0;
+}
+
+#brands li {
+  display: inline-block;
+  margin: 5px;
+}
+
+#brands .brand-btn {
+  border: 2px solid #00ffff;       /* Neon aqua border */
+  color: #00ffff;                  /* Text color */
+  background: transparent;         /* Transparent background */
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+#brands .brand-btn:hover {
+  background: #00ffff;             /* Fill with aqua */
+  color: #0d1b2a;                  /* Dark text inside */
+  box-shadow: 0 0 15px rgba(0,255,255,0.6);
+  transform: scale(1.05);
+}
+
+
+  img:hover {
+    transition: 0.3s;
+    transform: scale(1.1);
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }
+</style>
+
+<div class="container text-center mt-4">
+
+  <!-- Bike Selection Section -->
+<!-- Bike Selection Section -->
+<section class="bike-section py-5 text-center text-white">
+  <div class="container">
+    <!-- Heading -->
+    <h1 class="fw-bold mb-3">🚴 Choose Your Perfect Ride</h1>
+    <p class="lead mb-4">Browse through our wide collection of bikes and book your favorite in just a few clicks.</p>
+
+    <!-- Filters -->
+    <form method="get" class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+
+      <!-- Sort Dropdown -->
+      <select name="sort" class="form-select w-auto rounded-pill shadow-sm px-3"
+              onchange="this.form.submit()">
+        <option value="">Sort By</option>
+        <option value="price" {% if request.GET.sort == "price" %}selected{% endif %}>💲 Price</option>
+        <option value="availability" {% if request.GET.sort == "availability" %}selected{% endif %}>✅ Availability</option>
+        <option value="popularity" {% if request.GET.sort == "popularity" %}selected{% endif %}>⭐ Popularity</option>
+      </select>
+
+      <!-- Category Filter -->
+      <select name="category" class="form-select w-auto rounded-pill shadow-sm px-3"
+              onchange="this.form.submit()">
+        <option value="">Category</option>
+        <option value="mountain" {% if request.GET.category == "mountain" %}selected{% endif %}>⛰️ Mountain Bike</option>
+        <option value="road" {% if request.GET.category == "road" %}selected{% endif %}>🚴 Road Bike</option>
+        <option value="electric" {% if request.GET.category == "electric" %}selected{% endif %}>⚡ Electric Bike</option>
+      </select>
+
+      <!-- Brand Filter -->
+      <select name="brand" class="form-select w-auto rounded-pill shadow-sm px-3"
+              onchange="this.form.submit()">
+        <option value="">Brand</option>
+        {% for brand in brands %}
+          <option value="{{ brand.company }}" {% if request.GET.brand == brand.company %}selected{% endif %}>
+            {{ brand.company }}
+          </option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</section>
+
+
+  <!-- Brand Buttons -->
+  <div id="brands" class="mb-4 text-center">
+    <ul>
+      {% for brand in brands %}
+        <li>
+          <a href="{% url 'display' brand.company %}">
+            <button class="btn brand-btn">{{ brand }}</button>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Bike Cards -->
+  <div class="row justify-content-center">
+    {% if bikes %}
+    {% for bike in bikes %}
+    <div class="col-md-3 mb-4">
+      <div class="card">
+        <img src="{{ bike.photo.url }}" class="card-img-top" alt="Bike Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ bike }}</h5>
+          <p class="card-text">{{ bike.desc|truncatechars:100 }}</p>
+          <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bikeModal{{ bike.pk }}">
+            <i class="fas fa-file-alt me-1"></i> Details
+          </a>
+          <a href="{% url 'book' bike.pk %}" class="btn btn-success">
+            <i class="fas fa-motorcycle me-1"></i> Book Now
+          </a>
+        </div>
+      </div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="bikeModal{{ bike.pk }}" tabindex="-1" aria-labelledby="bikeModalLabel{{ bike.pk }}" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content border-0 shadow-lg rounded-3">
+      <div class="modal-header border-0 bg-dark text-white">
+        <h4 class="modal-title fw-bold" id="bikeModalLabel{{ bike.pk }}">{{ bike.bike_name }}</h4>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body row g-4 p-4">
+        
+        <!-- Left: Large Image -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+          <img src="{{ bike.photo.url }}" class="img-fluid rounded shadow-lg" alt="{{ bike.bike_name }}">
+        </div>
+        
+        <!-- Right: Bike Details -->
+        <div class="col-md-6">
+          <h5 class="fw-bold mb-3">Specifications</h5>
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item"><i class="bi bi-building"></i> <strong>Brand:</strong> {{ bike.company }}</li>
+            <li class="list-group-item"><i class="bi bi-grid"></i> <strong>Category:</strong> {{ bike.category }}</li>
+            <li class="list-group-item"><i class="bi bi-currency-rupee"></i> <strong>Price:</strong> ₹{{ bike.price }}</li>
+            <li class="list-group-item">
+              <i class="bi bi-check-circle-fill text-success"></i> 
+              <strong>Availability:</strong> 
+              {% if bike.is_available %}
+                <span class="text-success fw-semibold">Available</span>
+              {% else %}
+                <span class="text-danger fw-semibold">Not Available</span>
+              {% endif %}
+            </li>
+            <li class="list-group-item"><i class="bi bi-star-fill text-warning"></i> <strong>Rating:</strong> {{ bike.rating }}</li>
+          </ul>
+
+          <h5 class="fw-bold mt-3">Description</h5>
+          <p class="text-muted">{{ bike.desc }}</p>
+
+          <div class="mt-4">
+            <a href="{% url 'book' bike.pk %}" class="btn btn-success btn-lg px-4 shadow-sm">🚴 Book Now</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    {% endfor %}
+    {% else %}
+    <h3>No bikes available for this brand.</h3>
+    {% endif %}
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      {% if bikes.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ bikes.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item disabled"><span class="page-link">Page {{ bikes.number }} of {{ bikes.paginator.num_pages }}</span></li>
+      {% if bikes.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ bikes.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute("data-bs-theme") || 'light';
+    document.documentElement.setAttribute("data-bs-theme", current === "light" ? "dark" : "light");
+  }
+</script>
+
+{% endblock body %}

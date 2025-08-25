@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bike Details
+{% endblock title %}
+
+{% block body %}
+<style>
+    .bike-display {
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .bike-card {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        text-align: center;
+    }
+
+    .bike-title {
+        color: #ff4b4b;
+        font-size: 2.2rem;
+        font-weight: bold;
+    }
+
+    .bike-desc {
+        font-size: 1.1rem;
+        margin: 20px 0;
+        color: #ddd;
+    }
+
+    .price {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        color: #00ffcc;
+    }
+
+    .availability {
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .stars {
+        color: gold;
+        font-size: 1.2rem;
+    }
+
+    .book-btn {
+        font-size: 1.1rem;
+        padding: 10px 30px;
+        border-radius: 50px;
+        background: #00c6ff;
+        border: none;
+        transition: background 0.3s ease;
+        margin-top: 20px;
+    }
+
+    .book-btn:hover {
+        background: #0072ff;
+        color: white;
+    }
+
+    .breadcrumb {
+        margin-bottom: 20px;
+    }
+
+    .back-link {
+        color: #00c6ff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back-link:hover {
+        color: #00ffff;
+        text-decoration: underline;
+    }
+
+    .carousel-img {
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="bike-display">
+    <div class="breadcrumb text-start">
+        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+    </div>
+
+    <div class="bike-card">
+
+        <!-- Carousel -->
+        {% if BO.images.all %}
+        <div id="bikeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for img in BO.images.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ img.image.url }}" class="d-block w-100 carousel-img" alt="Bike image {{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#bikeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#bikeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+        {% else %}
+            <img src="{{ BO.photo.url }}" alt="{{ BO.bike_name }}" class="img-fluid mb-3 carousel-img">
+        {% endif %}
+
+        <h2 class="bike-title">{{ BO.bike_name }}</h2>
+        <p class="bike-desc">{{ BO.desc }}</p>
+        <p class="price">💸 ₹{{ BO.price }} / day</p>
+
+        <p class="availability">
+            {% if BO.available %}
+                ✅ Available
+            {% else %}
+                ❌ Not Available
+            {% endif %}
+        </p>
+
+        <div class="stars">
+            ⭐️⭐️⭐️⭐️⭐️
+        </div>
+
+        <a href="{% url 'book' BO.pk %}" class="btn book-btn">🚀 Book Now</a>
+    </div>
+</div>
+{% endblock body %}

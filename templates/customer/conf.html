@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Booking Confirmation
+{% endblock title %}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 rounded-3 text-center p-4">
+        
+        <!-- Success Icon -->
+        <div class="mb-3">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+
+        <!-- Heading -->
+        <h2 class="fw-bold text-success">Booking Confirmed!</h2>
+        <p class="text-muted fs-5">
+          Thank you for booking with <span class="fw-bold text-primary">BikeWala</span>.  
+          Your ride is confirmed. We’ll reach out with further details shortly.
+        </p>
+
+        <!-- Booking Summary -->
+        <div class="card shadow-lg border-0 rounded-3 mt-4">
+         <div class="card-header bg-success text-white text-center fw-bold">
+            Booking Summary
+         </div>
+            <div class="card-body bg-light">
+               <ul class="list-unstyled fs-6 mb-0">
+                  <li><i class="bi bi-bicycle text-primary"></i> <strong>Bike:</strong> {{ booking.bike_name.bike_name }}</li>
+                  <li><i class="bi bi-building text-secondary"></i> <strong>Company:</strong> {{ booking.bike_name.company.name }}</li>
+                  <li><i class="bi bi-person-fill text-info"></i> <strong>Customer:</strong> {{ booking.username.username }}</li>
+                  <li><i class="bi bi-calendar-event text-warning"></i> <strong>Pickup:</strong> {{ booking.pickup_date }} at {{ booking.pickup_time }}</li>
+                  <li><i class="bi bi-calendar-check text-warning"></i> <strong>Drop:</strong> {{ booking.drop_date }} at {{ booking.drop_time }}</li>
+                  <li><i class="bi bi-currency-rupee text-success"></i> <strong>Price:</strong> <span class="fw-bold fs-5">₹{{ booking.bike_name.price }}</span></li>
+                  <li><i class="bi bi-flag text-danger"></i> <strong>Status:</strong> {{ booking.status }}</li>
+               </ul>
+            </div>
+         </div>
+
+
+        <!-- Buttons -->
+        <div class="mt-4">
+          <a href="{% url 'home' %}" class="btn btn-primary btn-lg me-2 shadow-sm">🏠 Go to Home</a>
+          <a href="{% url 'my_bookings' %}" class="btn btn-outline-dark btn-lg shadow-sm">📑 View My Bookings</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

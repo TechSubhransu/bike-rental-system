@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block title %}
+Register
+{% endblock title %}
+
+{% block body %}
+<style>
+    #card{
+        width: 21rem;
+    }
+</style>
+<center><br><br><br>
+    <div class="card" id="card" >
+        <div class="card-body">
+          <h4 class="card-title" style="color: cyan">Register Here</h4><br>
+          <form method="post", enctype="multipart/form-data">
+            {% csrf_token %}
+            {{EUFO.as_p}}
+            {{ECFO.as_p}}
+            <button type="submit">Register</button>
+            </form>
+        </div>
+      </div>
+</center>
+{% endblock body %}
