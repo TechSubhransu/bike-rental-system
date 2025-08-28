@@ -6,9 +6,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 import random
 from renter.models import *
+from django.core.mail import send_mail
 from django.core.paginator import Paginator
 
 from django.shortcuts import render, get_object_or_404
+from rest_framework import generics
+from .serializers import BookingSerializer, ProfileSerializer
 # Create your views here.
 
 
@@ -171,6 +174,7 @@ def book(request, pk):
             BFDO = BookingForm(request.POST)
             UO = User.objects.get(username=un)
             BO = Bike.objects.get(pk=pk)
+            # check if already booked on same pickup date
             bookings = Booking.objects.filter(bike_name=BO)
             for booking in bookings:
                 if str(booking.pickup_date) == request.POST.get('pickup_date'):
@@ -179,7 +183,18 @@ def book(request, pk):
             MBFDO.username = UO
             MBFDO.bike_name=bike
             MBFDO.save()
-            return render(request, 'customer/conf.html')
+            
+            # Send confirmation email
+            send_mail(
+                subject="Bike Booking Confirmation",
+                message=f"Hello {UO.username},\n\n"
+                        f"Your booking for {bike.bike_name} on {MBFDO.pickup_date} "
+                        f"is confirmed.\n\nThank you for choosing us!",
+                from_email="munuparida550@gmail.com",
+                recipient_list=[UO.email],  # user email from database
+                fail_silently=False,
+            )
+            return render(request, 'customer/conf.html',  {'booking': MBFDO})
         return render(request, 'customer/book.html', d)
     return HttpResponseRedirect(reverse('user_login'))
 
@@ -207,3 +222,25 @@ def my_bookings(request):
 def booking_confirm(request, booking_id):
     booking = get_object_or_404(Booking, booking_id=booking_id)
     return render(request, "conf.html", {"booking": booking})
+
+#List all bookings of a user
+class BookingList(generics.ListCreateAPIView):
+    serializer_class = BookingSerializer
+
+    def get_queryset(self):
+        username = self.request.query_params.get('username')
+        if username:
+            return Booking.objects.filter(username__username=username)
+        return Booking.objects.all()
+    
+#List user profile
+class ProfileDetail(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = 'username'
+    
+#Single booking details
+class BookingDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    lookup_field = 'booking_id'

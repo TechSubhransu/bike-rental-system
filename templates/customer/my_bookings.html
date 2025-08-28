@@ -131,4 +131,20 @@ My Bookings
     </center>
   {% endif %}
 </div>
+<script>
+  fetch("/api/customer/bookings/")
+    .then(response => response.json())
+    .then(data => {
+      console.log("API Data:", data); // ✅ check in console
+      const list = document.getElementById("bookings-list");
+      if (data.length === 0) {
+        list.innerHTML = "<li>No bookings found</li>";
+      } else {
+        data.forEach(b => {
+          list.innerHTML += `<li>🚲 ${b.bike} - booked by ${b.customer}</li>`;
+        });
+      }
+    })
+    .catch(err => console.error("Error fetching API:", err));
+</script>
 {% endblock body %}

@@ -127,81 +127,90 @@ Home
     </ul>
   </div>
 
-  <!-- Bike Cards -->
-  <div class="row justify-content-center">
-    {% if bikes %}
-    {% for bike in bikes %}
-    <div class="col-md-3 mb-4">
-      <div class="card">
-        <img src="{{ bike.photo.url }}" class="card-img-top" alt="Bike Image">
-        <div class="card-body">
-          <h5 class="card-title">{{ bike }}</h5>
-          <p class="card-text">{{ bike.desc|truncatechars:100 }}</p>
-          <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bikeModal{{ bike.pk }}">
-            <i class="fas fa-file-alt me-1"></i> Details
-          </a>
-          <a href="{% url 'book' bike.pk %}" class="btn btn-success">
-            <i class="fas fa-motorcycle me-1"></i> Book Now
-          </a>
+<!-- Bike Cards -->
+<div class="row justify-content-center">
+  {% if bikes %}
+  {% for bike in bikes %}
+  <div class="col-md-3 mb-4">
+    <div class="card h-100 shadow-sm rounded-3">
+      <!-- Bike Image -->
+      <img src="{{ bike.photo.url }}" class="card-img-top" alt="{{ bike.bike_name }}">
+      
+      <div class="card-body text-center">
+        <!-- Bike Brand -->
+        <h6 class="text-muted text-uppercase mb-1">{{ bike.company }}</h6>
+        
+        <!-- Bike Name -->
+        <h5 class="card-title fw-bold mb-2">{{ bike.bike_name }}</h5>
+        
+        <!-- Small Description -->
+        <p class="card-text text-muted small">{{ bike.desc|truncatechars:80 }}</p>
+        
+        <!-- Buttons -->
+        <div class="d-flex justify-content-center gap-2">
+          <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bikeModal{{ bike.pk }}"> <i class="fas fa-file-alt me-1"></i> Details </a>
+          <a href="{% url 'book' bike.pk %}" class="btn btn-success"> <i class="fas fa-motorcycle me-1"></i> Book Now </a>
         </div>
       </div>
     </div>
+  </div>
 
-<!-- Modal -->
-<div class="modal fade" id="bikeModal{{ bike.pk }}" tabindex="-1" aria-labelledby="bikeModalLabel{{ bike.pk }}" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content border-0 shadow-lg rounded-3">
-      <div class="modal-header border-0 bg-dark text-white">
-        <h4 class="modal-title fw-bold" id="bikeModalLabel{{ bike.pk }}">{{ bike.bike_name }}</h4>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body row g-4 p-4">
-        
-        <!-- Left: Large Image -->
-        <div class="col-md-6 d-flex align-items-center justify-content-center">
-          <img src="{{ bike.photo.url }}" class="img-fluid rounded shadow-lg" alt="{{ bike.bike_name }}">
+  <!-- Modal -->
+  <div class="modal fade" id="bikeModal{{ bike.pk }}" tabindex="-1" aria-labelledby="bikeModalLabel{{ bike.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content border-0 shadow-lg rounded-3">
+        <div class="modal-header border-0 bg-dark text-white">
+          <h4 class="modal-title fw-bold" id="bikeModalLabel{{ bike.pk }}">{{ bike.bike_name }}</h4>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        
-        <!-- Right: Bike Details -->
-        <div class="col-md-6">
-          <h5 class="fw-bold mb-3">Specifications</h5>
-          <ul class="list-group list-group-flush mb-3">
-            <li class="list-group-item"><i class="bi bi-building"></i> <strong>Brand:</strong> {{ bike.company }}</li>
-            <li class="list-group-item"><i class="bi bi-grid"></i> <strong>Category:</strong> {{ bike.category }}</li>
-            <li class="list-group-item"><i class="bi bi-currency-rupee"></i> <strong>Price:</strong> ₹{{ bike.price }}</li>
-            <li class="list-group-item">
-              <i class="bi bi-check-circle-fill text-success"></i> 
-              <strong>Availability:</strong> 
-              {% if bike.is_available %}
-                <span class="text-success fw-semibold">Available</span>
-              {% else %}
-                <span class="text-danger fw-semibold">Not Available</span>
-              {% endif %}
-            </li>
-            <li class="list-group-item"><i class="bi bi-star-fill text-warning"></i> <strong>Rating:</strong> {{ bike.rating }}</li>
-          </ul>
+        <div class="modal-body row g-4 p-4">
+          
+          <!-- Left: Large Image -->
+          <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <img src="{{ bike.photo.url }}" class="img-fluid rounded shadow-lg" alt="{{ bike.bike_name }}">
+          </div>
+          
+          <!-- Right: Bike Details -->
+          <div class="col-md-6">
+            <h5 class="fw-bold mb-3">Specifications</h5>
+            <ul class="list-group list-group-flush mb-3">
+              <li class="list-group-item"><i class="bi bi-building"></i> <strong>Brand:</strong> {{ bike.company }}</li>
+              <li class="list-group-item"><i class="bi bi-grid"></i> <strong>Category:</strong> {{ bike.category }}</li>
+              <li class="list-group-item"><i class="bi bi-currency-rupee"></i> <strong>Price:</strong> ₹{{ bike.price }}</li>
+              <li class="list-group-item">
+                <i class="bi bi-check-circle-fill text-success"></i> 
+                <strong>Availability:</strong> 
+                {% if bike.is_available %}
+                  <span class="text-success fw-semibold">Available</span>
+                {% else %}
+                  <span class="text-danger fw-semibold">Not Available</span>
+                {% endif %}
+              </li>
+              <li class="list-group-item"><i class="bi bi-star-fill text-warning"></i> <strong>Rating:</strong> {{ bike.rating }}</li>
+            </ul>
 
-          <h5 class="fw-bold mt-3">Description</h5>
-          <p class="text-muted">{{ bike.desc }}</p>
+            <h5 class="fw-bold mt-3">Description</h5>
+            <p class="text-muted">{{ bike.desc }}</p>
 
-          <div class="mt-4">
-            <a href="{% url 'book' bike.pk %}" class="btn btn-success btn-lg px-4 shadow-sm">🚴 Book Now</a>
+            <div class="mt-4">
+              <a href="{% url 'book' bike.pk %}" class="btn btn-success btn-lg px-4 shadow-sm">🚴 Book Now</a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
+
+  {% endfor %}
+  {% else %}
+  <h3>No bikes available for this brand.</h3>
+  {% endif %}
 </div>
 
-    {% endfor %}
-    {% else %}
-    <h3>No bikes available for this brand.</h3>
-    {% endif %}
-  </div>
 
   <!-- Pagination -->
   <nav aria-label="Page navigation">

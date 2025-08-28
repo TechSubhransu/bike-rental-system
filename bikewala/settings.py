@@ -18,6 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIRS = os.path.join(BASE_DIR, 'templates')
 
 
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'customer',
     'renter',
 ]
@@ -133,8 +136,8 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'deepankarmali2001@gmail.com'
-EMAIL_HOST_PASSWORD = 'ecfl jvtj tmra hcye'
+EMAIL_HOST_USER = 'munuparida550@gmail.com'
+EMAIL_HOST_PASSWORD = 'gnwv ohpv zrgt sban'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_PORT = 587

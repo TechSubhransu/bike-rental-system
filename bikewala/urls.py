@@ -22,5 +22,9 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('customer.urls')),
-    path('renter/', include('renter.urls'))
+    path('renter/', include('renter.urls')),
+    
+    # REST API endpoints
+    path('api/renter/', include('renter.urls')),
+    path('api/customer/', include('customer.api_urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

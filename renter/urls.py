@@ -16,4 +16,13 @@ urlpatterns = [
     path('approve<pk>', approve, name='approve'),
     path('reject<pk>', reject, name='reject'),
     path('add_bikes/', add_bikes, name='add_bikes'),
+    path('brands/', BrandList.as_view(), name='brand-list'),
+    path('bikes/', BikeList.as_view(), name='bike-list'),
+    path('bikes/<int:pk>/', BikeDetail.as_view(), name='bike-detail'),
+    # filter by brand (example: /renter/bikes/brand/Honda/)
+    path('bikes/brand/<str:brand>/', BikesByBrand.as_view(), name='bikes-by-brand'),
+     # filter by category (example: /renter/bikes/category/Scooter/)
+    path('bikes/category/<str:category>/', BikesByCategory.as_view(), name='bikes-by-category'),
+     # filter by availability (example: /renter/bikes/availability/true/)
+    path('bikes/availability/<str:is_available>/', BikesByAvailability.as_view(), name='bikes-by-availability'),
 ]

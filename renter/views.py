@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 import random
 from renter.forms import *
+from rest_framework import generics
+from .serializers import BrandSerializer, BikeSerializer
 
 # Create your views here.
 
@@ -159,3 +161,42 @@ def renter_display(request, brand):
     bikes = Bike.objects.filter(company=brand)
     d = {'bikes': bikes, 'brand': brand}
     return render(request, 'renter/renter_home.html', d)
+
+#List all brands
+class BrandList(generics.ListCreateAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+    
+#List all bikes
+class BikeList(generics.ListCreateAPIView):
+    queryset = Bike.objects.all()
+    serializer_class = BikeSerializer
+    
+#Single bike details
+class BikeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Bike.objects.all()
+    serializer_class = BikeSerializer
+    
+#List bikes by brand
+class BikesByBrand(generics.ListAPIView):
+    serializer_class = BikeSerializer
+
+    def get_queryset(self):
+        brand = self.kwargs['brand']
+        return Bike.objects.filter(company__company=brand)
+
+#List bikes by category
+class BikesByCategory(generics.ListAPIView):
+    serializer_class = BikeSerializer
+
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return Bike.objects.filter(category=category)
+    
+#List bikes by availability
+class BikesByAvailability(generics.ListAPIView):
+    serializer_class = BikeSerializer
+
+    def get_queryset(self):
+        is_available = self.kwargs['is_available'].lower() == 'true'
+        return Bike.objects.filter(is_available=is_available)

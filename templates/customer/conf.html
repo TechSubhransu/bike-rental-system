@@ -30,7 +30,7 @@ Booking Confirmation
             <div class="card-body bg-light">
                <ul class="list-unstyled fs-6 mb-0">
                   <li><i class="bi bi-bicycle text-primary"></i> <strong>Bike:</strong> {{ booking.bike_name.bike_name }}</li>
-                  <li><i class="bi bi-building text-secondary"></i> <strong>Company:</strong> {{ booking.bike_name.company.name }}</li>
+                  <li><i class="bi bi-building text-secondary"></i> <strong>Company:</strong> {{ booking.bike_name.company }}</li>
                   <li><i class="bi bi-person-fill text-info"></i> <strong>Customer:</strong> {{ booking.username.username }}</li>
                   <li><i class="bi bi-calendar-event text-warning"></i> <strong>Pickup:</strong> {{ booking.pickup_date }} at {{ booking.pickup_time }}</li>
                   <li><i class="bi bi-calendar-check text-warning"></i> <strong>Drop:</strong> {{ booking.drop_date }} at {{ booking.drop_time }}</li>
